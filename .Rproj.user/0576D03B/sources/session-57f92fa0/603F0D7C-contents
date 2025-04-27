@@ -1,0 +1,67 @@
+---
+title: "Modeling and Comparison"
+output: html_document
+---
+```{r include=FALSE}
+source("data_prep.R")
+library(dplyr)
+library(plotly)
+library(ggplot2)
+library(scales)
+```
+# Fit Generalized Additive Model (GAM) {.tabset}
+## Smooth GAM
+```{r fig.cap="Figure 7: GAM smooth of daily crossings over time", echo=FALSE, warning=FALSE, message=FALSE}
+library(mgcv)
+library(dplyr)
+library(knitr)
+
+df_gam <- df_1 %>%
+  rename(Volume = `Sum of Volume`) %>%
+  mutate(
+    Date    = as.Date(Date, format = "%Y-%m-%d"),
+    time_num = as.numeric(Date),
+    month    = factor(
+      format(Date, "%m"),
+      levels = sprintf("%02d", 1:12),
+      labels = month.abb
+    )
+  )
+
+gam_basic <- gam(Volume ~ s(time_num), data = df_gam)
+plot(gam_basic, main = "GAM: Smooth(Time)")
+```
+
+## Smooth + Month GAM 
+```{r fig.cap="Figure 8: GAM smooth + month of daily crossings over time", echo=FALSE}
+gam_month <- gam(Volume ~ s(time_num) + month, data = df_gam)
+plot(gam_month, main = "GAM: + Month")
+```
+
+## Smooth + Month + Region + Transportation Mode
+```{r fig.cap="Figure 7: GAM smooth + Month + Region + Transportation Mode of daily crossings over time", echo=FALSE}
+gam_full  <- gam(Volume ~ s(time_num) + month + Region + Mode,
+                 data = df_gam)
+plot(gam_full,  main = "GAM: + Month + Region + Mode")
+```
+
+# Model Comparison: GAM v.s. Linear Regression
+<style>
+  table caption {
+    color: black !important;
+  }
+</style>
+```{r echo=FALSE}
+lm_linear <- lm(Volume ~ time_num, data = df_gam)
+lm_quad  <- lm(Volume ~ poly(time_num, 2), data = df_gam)
+lm_full    <- lm(Volume ~ month + Region + Mode, data = df_gam)
+
+aic_tab <- AIC(gam_basic, gam_month, gam_full,
+               lm_linear, lm_quad, lm_full)
+aic_tab$AIC <- round(aic_tab$AIC, 2)
+kable(
+  aic_tab,
+  caption = "Table 2: Model comparison via AIC (GAM vs. Linear regression)",
+  digits  = 2
+)
+```

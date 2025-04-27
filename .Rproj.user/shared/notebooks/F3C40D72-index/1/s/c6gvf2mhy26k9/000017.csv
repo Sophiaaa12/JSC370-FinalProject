@@ -1,0 +1,13 @@
+"0","source(""data_prep.R"")"
+"2","here() starts at /Users/zhusiyi/JSC370-FinalProject
+"
+"2","Warning: NAs introduced by coercion"
+"2","prep_data.R complete:
+  • df_1 rows:      146647
+  • df_merged rows: 698
+  • Written to:     /Users/zhusiyi/JSC370-FinalProject/data/merged_border_wait_times.csv
+"
+"0","library(dplyr)"
+"0","library(plotly)"
+"0","library(ggplot2)"
+"0","library(scales)"

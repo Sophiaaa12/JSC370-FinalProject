@@ -1,0 +1,62 @@
+---
+title: "US Analysis"
+output: html_document
+---
+```{r include=FALSE}
+source("data_prep.R")
+library(dplyr)
+library(plotly)
+library(ggplot2)
+library(scales)
+```
+
+# Monthly Patterns in US
+```{r fig.cap="Figure 9: Monthly trend in US total Border Crossings", echo=FALSE}
+library(plotly)
+library(leaflet)
+library(data.table)
+
+# Interactive Seasonal Trend (U.S. Data)
+df_bc[, Month := lubridate::month(Date, label = TRUE, abbr = TRUE)]
+us_seasonal_plot <- df_bc[, .(Total_Volume = sum(as.numeric(value))), by = Month]
+
+plot_ly(us_seasonal_plot, x = ~Month, y = ~Total_Volume, type = 'scatter', mode = 'lines+markers') %>%
+  layout(title = "U.S. Border Crossing Seasonal Trends",
+         xaxis = list(title = "Month"),
+         yaxis = list(title = "Total Crossings by Month"))
+```
+
+# Monthly Patterns: Canada v.s. US
+```{r fig.cap="Figure 10: Monthly trend in volumes of border crossings: Canada v.s. U.S.", echo=FALSE}
+df_merged[, Month := lubridate::month(Date, label = TRUE, abbr = TRUE)]
+
+merged_comparison <- df_merged[, .(
+  Canada_Volume = sum(as.numeric(`Sum of Volume`)),
+  US_Volume = sum(as.numeric(value))
+), by = Month]
+
+plot_ly(merged_comparison, x = ~Month) %>%
+  add_trace(y = ~Canada_Volume, name = 'Canada', type = 'scatter', mode = 'lines+markers',
+            line = list(color = 'blue'), yaxis = "y1") %>%
+  add_trace(y = ~US_Volume, name = 'U.S.', type = 'scatter', mode = 'lines+markers',
+            line = list(color = 'orange'), yaxis = "y2") %>%
+  layout(
+    title = "Monthly Border Crossing Volumes: Canada vs. U.S.",
+    xaxis = list(title = "Month"),
+    yaxis = list(title = "Canada Volume", side = "left", rangemode = "tozero"),
+    yaxis2 = list(title = "U.S. Volume", overlaying = "y", side = "right", rangemode = "tozero"),
+    legend = list(x = 0.1, y = 0.9)
+  )
+```
+
+# Regional Concentration (Canada-US Boundary)
+```{r fig.cap="Figure 11: Regional concentration of border-crossing volume at the boundary between Canada and US", echo=FALSE}
+map_data <- df_merged[, .(Total_Volume = sum(as.numeric(value))), by = .(PortCode, Latitude = as.numeric(latitude), Longitude = as.numeric(longitude))]
+
+leaflet(map_data) %>%
+  addTiles() %>%
+  addCircleMarkers(lng = ~Longitude, lat = ~Latitude, radius = ~sqrt(Total_Volume)/100,
+                   popup = ~paste("Port Code:", PortCode, "<br>", "Total Volume:", Total_Volume),
+                   color = "blue", fillOpacity = 0.6) %>%
+  setView(lng = -95, lat = 49, zoom = 4)
+```

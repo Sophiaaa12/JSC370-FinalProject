@@ -1,0 +1,125 @@
+---
+title: "JSC370 Final Project Overview"
+author: Siyi Zhu
+output: html_document
+---
+```{r include=FALSE}
+source("data_prep.R")
+library(dplyr)
+library(plotly)
+library(ggplot2)
+library(scales)
+```
+# Introduction:
+This dataset is about "Traveller volumes by port of entry and month" from Government of Canada (https://open.canada.ca/data/en/dataset/1b1c2b92-b388-47d9-87d4-01aee8d3c3e4/resource/22653cdd-d1e2-4c04-9d11-61b5cdd79b4e). An csv has been read to load the dataset from 2018-01-01 to 2019-05-24. It includes details such as **date, port of entry, region, mode of transportation, and the volume of crossings**. Understanding border traffic is essential for transportation planning, security, and economic forecasting.
+
+
+To complement and extend our understanding of border crossing dynamics, there is also an additional dataset "Border Crossing Entry Data" sourced from the U.S. Department of Transportation. API has been calling to load this dataset and will merge with the first dataset to do further analysis. This dataset provides complementary insights from the U.S. perspective, covering similar details such as **port name, date, measure (vehicles, pedestrians, etc.), and crossing volumes**.
+
+The research question is: **To what extent do seasonal patterns, geographic regions, day-of-week (weekday vs. weekend), and transportation mode explain daily border-crossing volumes into Canada between January 2018 and May 2019? Additionally, how do seasonal patterns and geographic concentrations manifest on the U.S. side of the Canada–U.S. boundary between January 2018 and May 2019?**
+
+Within this question, there are four hypothesis:<br>
+1. **Seasonality (Canada & U.S.)**: Peaks in summer and troughs in winter on both sides of the border.<br>
+2. **Transportation Mode (Canada)**: Land crossings dominate across the whole boundary.<br>
+3. **Regional Concentrations (Canada & U.S.)**: A small set of ports (both Canadian and U.S.) capture the bulk of crossing volume.<br>
+4. **Cross-Border Comparison (Canada v.s. U.S.)**: Although the U.S. side is expected to follow the same summer-peak/winter-trough pattern and port-concentration structure, the overall volumes and exact timing of those peaks may differ from the Canadian experience.<br>
+
+
+## Canada Border Crossings Trend {.tabset}
+### Trend By Day
+```{r fig.cap="Figure 1: Trend of Border Crossings Over Time (Canada)", echo=FALSE}
+library(plotly)
+df_date <- df_1 %>%
+  mutate(Date = as.Date(Date)) %>%
+  group_by(Date) %>%
+  summarise(Total = sum(`Sum of Volume`, na.rm = TRUE), .groups="drop")
+
+p1 <- ggplot(df_date, aes(x = Date, y = Total)) +
+  geom_line(color = "steelblue") +
+  labs(
+    title = "Trend of Border Crossings Over Time (2018–2019)",
+    x = "Date", y = "Total Crossings by Day"
+  ) +
+  theme_minimal()
+ggplotly(p1, tooltip = c("x", "y"))
+```
+
+### Trend by Region
+```{r fig.cap="Figure 2: Trend of Border Crossings by Region", echo=FALSE}
+library(plotly)
+# totals by region
+df_region <- df_1 %>%
+  group_by(Region) %>%
+  summarise(Total = sum(`Sum of Volume`, na.rm = TRUE), .groups="drop") %>%
+  arrange(desc(Total))
+
+p2 <- ggplot(df_region, aes(x = reorder(Region, -Total), y = Total, text = paste0(Region, ": ", scales::comma(Total)))) +
+  geom_col(fill = "orange") +
+  labs(
+    title = "Total Border Crossings by Region",
+    x = "Region", y = "Total Crossings by Day"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggplotly(p2, tooltip = "text")
+```
+
+### Trend by Transportation Mode
+```{r fig.cap="Figure 3: Trend of Border Crossings by Transportation Mode (Log Scale to show trends more obviously)",echo=FALSE}
+library(dplyr)
+library(plotly)
+
+df_mode <- df_1 %>%
+  mutate(Date = as.Date(Date)) %>%
+  group_by(Date, Mode) %>%
+  summarise(Total = sum(`Sum of Volume`, na.rm = TRUE), .groups="drop")
+
+plot_ly(
+  df_mode,
+  x = ~Date,
+  y = ~Total,
+  color = ~Mode,
+  colors = "Dark2",
+  type = "scatter",
+  mode = "lines",
+  hoverinfo = "x+y+name"
+) %>%
+  layout(
+    title = "Daily Border Crossings by Transportation Mode (Log Scale)",
+    xaxis = list(title = "Date"),
+    yaxis = list(type = "log", title = "Total Crossings by Day (log scale)"),
+    legend = list(title = list(text = "<b>Mode</b>"))
+  )
+```
+
+### Trend by Region and Transportation Mode
+```{r fig.cap="Figure 3: Trend of Border Crossings by Region and Transportation Mode (Log Scale to show trends more obviously)",echo=FALSE}
+library(dplyr)
+library(plotly)
+library(scales)
+
+df_mode <- df_1 %>%
+  group_by(Region, Mode) %>%
+  summarise(Total = sum(`Sum of Volume`, na.rm = TRUE), .groups="drop")
+
+plot_ly(
+  df_mode,
+  x         = ~Region,
+  y         = ~Total,
+  color     = ~Mode,
+  colors    = "Set2",
+  type      = "bar",
+  text      = ~comma(Total),
+  hoverinfo = "text+legend"
+) %>%
+  layout(
+    barmode = "group",
+    title   = "Border Crossings by Region and Transportation Mode (Log Scale)",
+    xaxis   = list(tickangle = -45),
+    yaxis   = list(
+                title = "Total Crossings by Day (log scale)",
+                type  = "log"
+              ),
+    legend = list(title = list(text = "<b>Mode</b>"))
+  )
+```

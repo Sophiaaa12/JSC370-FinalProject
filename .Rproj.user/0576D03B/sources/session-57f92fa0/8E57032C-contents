@@ -1,0 +1,80 @@
+---
+title: "Monthly / Daily Patterns"
+output: html_document
+---
+```{r include=FALSE}
+source("data_prep.R")
+library(dplyr)
+library(plotly)
+library(ggplot2)
+library(scales)
+```
+
+# Monthly Patterns
+```{r fig.cap="Figure 5: Monthly trend in average daily border crossings", echo=FALSE}
+df_date <- df_1 %>%
+  mutate(Date = as.Date(Date)) %>%
+  group_by(Date) %>%
+  summarise(Total = sum(`Sum of Volume`, na.rm = TRUE), .groups="drop")
+
+df_month <- df_date %>%
+  mutate(month = lubridate::month(Date, label=TRUE)) %>%
+  group_by(month) %>%
+  summarize(avg = mean(Total), .groups="drop")
+
+p_month <- ggplot(df_month, aes(x=month, y=avg)) +
+  geom_col() +
+  labs(title="Average Daily Crossings by Month",
+       x="Month", y="Average Daily Crossings") +
+  theme_minimal()
+
+ggplotly(p_month, tooltip=c("x","y"))
+```
+
+# Daily Patterns {.tabset}
+## Weekday vs. Weekend
+```{r fig.cap="Figure 6: Trend in Daily Crossings by Day Type (Weekday vs. Weekend)", echo=FALSE}
+df_daytype <- df_date %>%
+  mutate(wclass = ifelse(lubridate::wday(Date) %in% 2:6, "Weekday", "Weekend"))
+
+p_wd <- ggplot(df_daytype, aes(x=wclass, y=Total)) +
+  geom_boxplot() +
+  labs(title="Daily Crossings: Weekday vs. Weekend",
+       x="", y="Total Crossings") +
+  theme_minimal()
+
+ggplotly(p_wd, tooltip=c("x","y"))
+```
+
+## T-test
+<style>
+  table caption {
+    color: black !important;
+  }
+</style>
+```{r weekday-ttest-table, echo=FALSE, message=FALSE, warning=FALSE}
+library(lubridate)
+library(broom)
+library(knitr)
+
+df_date <- df_1 %>%
+  mutate(Date = as.Date(Date)) %>%
+  group_by(Date) %>%
+  summarise(Total = sum(`Sum of Volume`, na.rm = TRUE), .groups="drop")
+
+df_wd <- df_date %>%
+  mutate(
+    weekday = wday(Date, label=TRUE),
+    DayType = ifelse(weekday %in% c("Sat","Sun"), "Weekend", "Weekday")
+  )
+
+# Run the t-test
+tt_res <- t.test(Total ~ DayType, data = df_wd)
+
+# Tidy it into a data.frame and show as a kable with caption
+tt_tbl <- tidy(tt_res)
+kable(
+  tt_tbl,
+  caption = "Table 1: T-test of the trend in daily crossings by day type (Weekday vs. Weekend), verifying the pattern seen in the boxplot."
+)
+```

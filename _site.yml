@@ -1,0 +1,23 @@
+name: "JSC370-FinalProject"
+output_dir: "docs"
+
+navbar:
+  title: "JSC370 Final Project"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Monthly/Daily Patterns"
+      href: patterns.html
+    - text: "Modeling"
+      href: gam.html
+    - text: "Regional Concentration Map"
+      href: map.html
+    - text: "US Analysis"
+      href: us.html  
+
+output:
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: true
+    number_sections: false
