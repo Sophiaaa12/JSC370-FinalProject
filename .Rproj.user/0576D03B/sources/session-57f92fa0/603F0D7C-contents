@@ -39,7 +39,7 @@ plot(gam_month, main = "GAM: + Month")
 ```
 
 ## Smooth + Month + Region + Transportation Mode
-```{r fig.cap="Figure 7: GAM smooth + Month + Region + Transportation Mode of daily crossings over time", echo=FALSE}
+```{r fig.cap="Figure 9: GAM smooth + Month + Region + Transportation Mode of daily crossings over time", echo=FALSE}
 gam_full  <- gam(Volume ~ s(time_num) + month + Region + Mode,
                  data = df_gam)
 plot(gam_full,  main = "GAM: + Month + Region + Mode")

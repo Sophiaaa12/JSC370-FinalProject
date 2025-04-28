@@ -10,7 +10,7 @@ library(ggplot2)
 library(scales)
 ```
 
-```{r interactive-top30-fixed, echo=FALSE, fig.cap="Figure 8: Regional concentration of border-crossing volume at the top-30 busiest ports", echo=FALSE}
+```{r interactive-top30-fixed, echo=FALSE, fig.cap="Figure 10: Regional concentration of border-crossing volume at the top-30 busiest ports", echo=FALSE}
 library(dplyr)
 library(stringr)
 library(leaflet)

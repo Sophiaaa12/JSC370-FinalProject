@@ -13,8 +13,7 @@ library(scales)
 # Introduction:
 This dataset is about "Traveller volumes by port of entry and month" from Government of Canada (https://open.canada.ca/data/en/dataset/1b1c2b92-b388-47d9-87d4-01aee8d3c3e4/resource/22653cdd-d1e2-4c04-9d11-61b5cdd79b4e). An csv has been read to load the dataset from 2018-01-01 to 2019-05-24. It includes details such as **date, port of entry, region, mode of transportation, and the volume of crossings**. Understanding border traffic is essential for transportation planning, security, and economic forecasting.
 
-
-To complement and extend our understanding of border crossing dynamics, there is also an additional dataset "Border Crossing Entry Data" sourced from the U.S. Department of Transportation. API has been calling to load this dataset and will merge with the first dataset to do further analysis. This dataset provides complementary insights from the U.S. perspective, covering similar details such as **port name, date, measure (vehicles, pedestrians, etc.), and crossing volumes**.
+To complement and extend our understanding of border crossing dynamics, there is also an additional dataset "Border Crossing Entry Data" sourced from the U.S. Department of Transportation (https://data.bts.gov/Research-and-Statistics/Border-Crossing-Entry-Data/keg4-3bc2/data_preview). API has been calling to load this dataset and will merge with the first dataset to do further analysis. This dataset provides complementary insights from the U.S. perspective, covering similar details such as **port name, date, measure (vehicles, pedestrians, etc.), and crossing volumes**.
 
 The research question is: **To what extent do seasonal patterns, geographic regions, day-of-week (weekday vs. weekend), and transportation mode explain daily border-crossing volumes into Canada between January 2018 and May 2019? Additionally, how do seasonal patterns and geographic concentrations manifest on the U.S. side of the Canada–U.S. boundary between January 2018 and May 2019?**
 
@@ -93,7 +92,7 @@ plot_ly(
 ```
 
 ### Trend by Region and Transportation Mode
-```{r fig.cap="Figure 3: Trend of Border Crossings by Region and Transportation Mode (Log Scale to show trends more obviously)",echo=FALSE}
+```{r fig.cap="Figure 4: Trend of Border Crossings by Region and Transportation Mode (Log Scale to show trends more obviously)",echo=FALSE}
 library(dplyr)
 library(plotly)
 library(scales)
