@@ -1,6 +1,7 @@
 # JSC370 - Final Project
 **View the project website:** 
 [Project Website](https://sophiaaa12.github.io/JSC370-FinalProject/index.html)
+[📄 **Download the Full Final Report (PDF)**](Final_Report.pdf){target="_blank"}
 
 ## Introduction:
 Every year, millions of people and vehicles cross the Canada border for work, tourism, and so on. These movements are critical not only for local economies but also for infrastructure planning. Understanding daily border traffic can help governments design targeted marketing for tourism, and forecast revenue from duty-free sales. Additionally, incorporating U.S. data extends our insights: comparing patterns on both sides allows policymakers to identify best practices, leverage U.S. operational strengths, and address Canada’s crossover vulnerabilities. This binational perspective fosters more coordinated, evidence-based policies and infrastructure investments along the Canada–U.S. corridor.
