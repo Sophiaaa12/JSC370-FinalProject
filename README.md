@@ -10,11 +10,11 @@ The research question is: **To what extent do seasonal patterns, geographic regi
 ## Data Sources Instructions:
 This project uses two cross-border travel datasets:
 1. **Traveller Volumes by Port of Entry (Canada)**  
-   Source: Government of Canada  
+   Source: Government of Canada (https://open.canada.ca/data/en/dataset/1b1c2b92-b388-47d9-87d4-01aee8d3c3e4/resource/22653cdd-d1e2-4c04-9d11-61b5cdd79b4e)
    Loaded from the `data/` folder using a pre-downloaded CSV, since the API occasionally blocks peer requests.
 
 2. **Border Crossing Entry Data (U.S.)**  
-   Source: U.S. Department of Transportation  
+   Source: U.S. Department of Transportation (https://data.bts.gov/Research-and-Statistics/Border-Crossing-Entry-Data/keg4-3bc2/data_preview)
    Accessed via API:  
    [https://data.bts.gov/resource/keg4-3bc2.json?$limit=500000](https://data.bts.gov/resource/keg4-3bc2.json?$limit=500000)
 
