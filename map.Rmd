@@ -18,10 +18,11 @@ library(tibble)
 
 top30 <- df_1 %>%
   mutate(port_code = str_extract(`Port of Entry`, "^[0-9]{4}")) %>%
-  group_by(port_code) %>%
-  summarise(Volume = sum(`Sum of Volume`, na.rm = TRUE), .groups="drop") %>%
+  group_by(port_code, `Port of Entry`) %>%
+  summarise(Volume = sum(`Sum of Volume`, na.rm = TRUE), .groups = "drop") %>%
   arrange(desc(Volume)) %>%
-  slice_head(n = 30)
+  slice_head(n = 30) %>%
+  rename(port_name = `Port of Entry`)
 
 coords30 <- tribble(
   ~port_code, ~lon,       ~lat,
@@ -72,7 +73,7 @@ leaflet(df_plot) %>%
     color       = "white",
     fillColor   = ~pal(Volume),
     fillOpacity = 0.8,
-    label       = ~paste0(port_code, ": ", scales::comma(Volume)),
+    label       = ~paste0(port_name, " (", port_code, "): ", scales::comma(Volume)),
     labelOptions= labelOptions(direction = "auto")
   ) %>%
   addLegend(

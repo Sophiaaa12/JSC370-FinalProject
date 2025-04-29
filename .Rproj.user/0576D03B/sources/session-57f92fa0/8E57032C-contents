@@ -23,7 +23,7 @@ df_month <- df_date %>%
   summarize(avg = mean(Total), .groups="drop")
 
 p_month <- ggplot(df_month, aes(x=month, y=avg)) +
-  geom_col() +
+  geom_col(fill = "lightblue") +
   labs(title="Average Daily Crossings by Month",
        x="Month", y="Average Daily Crossings") +
   theme_minimal()
