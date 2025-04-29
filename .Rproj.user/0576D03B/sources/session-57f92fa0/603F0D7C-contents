@@ -11,7 +11,7 @@ library(scales)
 ```
 # Fit Generalized Additive Model (GAM) {.tabset}
 ## Smooth GAM
-```{r fig.cap="Figure 7: GAM smooth of daily crossings over time", echo=FALSE, warning=FALSE, message=FALSE}
+```{r fig.cap="Figure 8: GAM smooth of daily crossings over time", echo=FALSE, warning=FALSE, message=FALSE}
 library(mgcv)
 library(dplyr)
 library(knitr)
@@ -33,13 +33,13 @@ plot(gam_basic, main = "GAM: Smooth(Time)")
 ```
 
 ## Smooth + Month GAM 
-```{r fig.cap="Figure 8: GAM smooth + month of daily crossings over time", echo=FALSE}
+```{r fig.cap="Figure 9: GAM smooth + month of daily crossings over time", echo=FALSE}
 gam_month <- gam(Volume ~ s(time_num) + month, data = df_gam)
 plot(gam_month, main = "GAM: + Month")
 ```
 
 ## Smooth + Month + Region + Transportation Mode
-```{r fig.cap="Figure 9: GAM smooth + Month + Region + Transportation Mode of daily crossings over time", echo=FALSE}
+```{r fig.cap="Figure 10: GAM smooth + Month + Region + Transportation Mode of daily crossings over time", echo=FALSE}
 gam_full  <- gam(Volume ~ s(time_num) + month + Region + Mode,
                  data = df_gam)
 plot(gam_full,  main = "GAM: + Month + Region + Mode")
@@ -61,7 +61,7 @@ aic_tab <- AIC(gam_basic, gam_month, gam_full,
 aic_tab$AIC <- round(aic_tab$AIC, 2)
 kable(
   aic_tab,
-  caption = "Table 2: Model comparison via AIC (GAM vs. Linear regression)",
+  caption = "Table 8: Model comparison via AIC (GAM vs. Linear regression)",
   digits  = 2
 )
 ```

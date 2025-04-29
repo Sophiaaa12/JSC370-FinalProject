@@ -3,7 +3,7 @@
     "path": "~/JSC370-FinalProject/patterns.Rmd",
     "project_path": "patterns.Rmd",
     "type": "r_markdown",
-    "hash": "2661334018",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1745712640631.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "53,8",
-        "scrollLine": "44"
+        "cursorPosition": "45,3",
+        "scrollLine": "26"
     },
     "folds": "",
-    "lastKnownWriteTime": 1745724396,
+    "lastKnownWriteTime": 1745873743,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1745724396855,
+    "last_content_update": 1745873743167,
     "read_only": false,
     "read_only_alternatives": []
 }

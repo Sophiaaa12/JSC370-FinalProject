@@ -11,22 +11,30 @@ library(scales)
 ```
 
 # Monthly Patterns in US
-```{r fig.cap="Figure 11: Monthly trend in US total Border Crossings", echo=FALSE}
+```{r fig.cap="Figure 12: Monthly total volume of U.S. border crossings aggregated across 2018 and 2019.", echo=FALSE}
 library(plotly)
-library(leaflet)
 library(data.table)
 
 df_bc[, Month := lubridate::month(Date, label = TRUE, abbr = TRUE)]
-us_seasonal_plot <- df_bc[, .(Total_Volume = sum(as.numeric(value))), by = Month]
+us_month <- df_bc[, .(Total_Volume = sum(as.numeric(value))), by = Month]
 
-plot_ly(us_seasonal_plot, x = ~Month, y = ~Total_Volume, type = 'scatter', mode = 'lines+markers') %>%
-  layout(title = "U.S. Border Crossing Seasonal Trends",
-         xaxis = list(title = "Month"),
-         yaxis = list(title = "Total Crossings by Month"))
+plot_ly(
+  us_month, 
+  x = ~Month, 
+  y = ~Total_Volume, 
+  type = 'scatter', 
+  mode = 'lines', 
+  fill = 'tozeroy'
+) %>%
+  layout(
+    title = "U.S. Border Crossing Seasonal Trends (Aggregated 2018–2019)",
+    xaxis = list(title = "Month"),
+    yaxis = list(title = "Total Crossings by Month")
+  )
 ```
 
 # Monthly Patterns: Canada v.s. US
-```{r fig.cap="Figure 12: Monthly trend in volumes of border crossings: Canada v.s. U.S.", echo=FALSE}
+```{r fig.cap="Figure 13: Monthly total volumes of border crossings between Canada and the U.S., aggregated across 2018 and 2019.", echo=FALSE}
 df_merged[, Month := lubridate::month(Date, label = TRUE, abbr = TRUE)]
 
 merged_comparison <- df_merged[, .(
@@ -40,7 +48,7 @@ plot_ly(merged_comparison, x = ~Month) %>%
   add_trace(y = ~US_Volume, name = 'U.S.', type = 'scatter', mode = 'lines+markers',
             line = list(color = 'orange'), yaxis = "y2") %>%
   layout(
-    title = "Monthly Border Crossing Volumes: Canada vs. U.S.",
+    title = "Monthly Border Crossing Volumes: Canada vs. U.S. (Aggregated 2018–2019)",
     xaxis = list(title = "Month"),
     yaxis = list(title = "Canada Volume", side = "left", rangemode = "tozero"),
     yaxis2 = list(title = "U.S. Volume", overlaying = "y", side = "right", rangemode = "tozero"),
@@ -49,7 +57,7 @@ plot_ly(merged_comparison, x = ~Month) %>%
 ```
 
 # Regional Concentration (Canada-US Boundary)
-```{r fig.cap="Figure 13: Regional concentration of border-crossing volume at the boundary between Canada and US", echo=FALSE, warning=FALSE}
+```{r fig.cap="Figure 14: Regional concentration of border-crossing volume at the boundary between Canada and US", echo=FALSE, warning=FALSE}
 top30 <- df_1 %>%
   mutate(port_code = str_extract(`Port of Entry`, "^[0-9]{4}")) %>%
   group_by(port_code) %>%
