@@ -5,13 +5,12 @@ library(lubridate)
 
 here::i_am("data_prep.R")
 
-api_csv  <- here("data", "22653cdd-d1e2-4c04-9d11-61b5cdd79b4e (1).csv")
-soda_url <- "https://data.bts.gov/resource/keg4-3bc2.json?$limit=500000"
-out_csv  <- here("data", "merged_border_wait_times.csv")
+canada_csv  <- here("data", "canada_border_data.csv")
+usa_url <- "https://data.bts.gov/resource/keg4-3bc2.json?$limit=500000"
 
-df_1 <- fread(api_csv)
+df_1 <- fread(canada_csv)
 
-df_bc <- fromJSON(soda_url, flatten = TRUE) |> setDT()
+df_bc <- fromJSON(usa_url, flatten = TRUE) |> setDT()
 
 df_1[, PortCode := as.integer(sub(" -.*$", "", `Port of Entry`))]
 

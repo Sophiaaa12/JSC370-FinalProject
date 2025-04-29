@@ -3,7 +3,7 @@
     "path": "~/JSC370-FinalProject/us.Rmd",
     "project_path": "us.Rmd",
     "type": "r_markdown",
-    "hash": "0",
+    "hash": "663395079",
     "contents": "",
     "dirty": false,
     "created": 1745723007759.0,
@@ -16,11 +16,11 @@
         "scrollLine": "126"
     },
     "folds": "",
-    "lastKnownWriteTime": 1745950181,
+    "lastKnownWriteTime": 1745962264,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1745950181278,
+    "last_content_update": 1745962266693,
     "read_only": false,
     "read_only_alternatives": []
 }
